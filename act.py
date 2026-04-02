@@ -1,0 +1,9 @@
+number1=[]
+print(number1)
+number2=[1,2,3,4,5]
+print(number2)
+num=[1,2,3]*3
+print(num)
+alist=[100,200,300,400,500]
+alist.reverse()
+print(alist)
