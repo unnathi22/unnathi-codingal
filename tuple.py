@@ -1,0 +1,11 @@
+tupex=("true",22)
+print(tupex)
+tupex2=('1','2','3')
+print(tupex2)
+merge=(tupex+tupex2)
+print(merge)
+tupex=tupex+('9',)
+print(tupex)
+tuple1=(50,50,50,20,20)
+print(tuple1.count(50))
+
