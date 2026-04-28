@@ -9,10 +9,11 @@ class dog(animals):
     def move(self):
         print("i can bark")
 class birds(animals):
-    print("i can fly")
+    def move(self):
+     print("i can fly")
 obj=human()
-obj.move
+obj.move()
 obj1=dog()
-obj1.move
+obj1.move()
 obj2=birds()
-obj2.move
+obj2.move()
