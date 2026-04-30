@@ -1,9 +1,9 @@
 class flashcards:
-    def __init(self,word,meaning):
+    def __init__(self,word,meaning):
         self.word=word
         self.meaning=meaning
     def __str__(self):
-        self.word +'('+self.meaning+')'
+       return self.word +'('+self.meaning+')'
 flash=[]
 while(True):
     word=input("enter you word here:")
