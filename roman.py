@@ -1,7 +1,16 @@
 class roman_numbers:
-    def __init__(self):
-        self.values={"I":"1","II":"2","III":"3","IV":"4","V":"5","VI":"6","VII":"7","VIII":"8","IX":"9","X":"10"}
-    def numbers(self):
-        while(True):
-            
-        
+    def convert(self,num):
+        values=[(1000, "M"), (900, "CM"), (500, "D"), (400, "CD"),
+            (100, "C"), (90, "XC"), (50, "L"), (40, "XL"),
+            (10, "X"), (9, "IX"), (5, "V"), (4, "IV"), (1, "I")]
+        result = ""  # Our empty bag to hold the letters
+
+        for value, symbol in values:
+            while num >= value:
+                result += symbol
+                num -= value
+        return result
+converter=roman_numbers()
+userinput=int(input("enter the number you wanna know the roman value of:"))
+romanconversion=converter.convert(userinput)
+print(f"your roman value for the number you entered is:",romanconversion)
