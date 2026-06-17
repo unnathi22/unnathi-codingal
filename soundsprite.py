@@ -97,8 +97,9 @@ def isCollision(enemyX, enemyY, bulletX, bulletY):
     # Check if there is a collision between the enemy and a bullet
     distance = math.sqrt((enemyX - bulletX) ** 2 + (enemyY - bulletY) ** 2)
     return distance < COLLISION_DISTANCE
-
-#Game loop
+pygame.mixer.music.load("gamesound.mp3")
+pygame.mixer.music.set_volume(0.5)
+pygame.mixer.music.play(-1)
 running = True
 while running:
     screen.fill((0, 0, 0))
