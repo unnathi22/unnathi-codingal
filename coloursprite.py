@@ -6,7 +6,6 @@ def main():
     screen = pygame.display.set_mode((screen_width, screen_height))
     pygame.display.set_caption('color changing sprite')
 
-    # Mapping of color names to RGB values
     colors = {
         'red': pygame.Color('red'),
         'green': pygame.Color('green'),
