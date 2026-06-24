@@ -1,0 +1,20 @@
+import tkinter as tk
+from datetime import date
+def get_age():
+    age = date.today().year - int(year.get()) - ((date.today().month, date.today().day) < (int(month.get()), int(day.get())))
+    lbl.config(text=f"Age: {age}")
+root = tk.Tk()
+root.title("Age")
+day = tk.Entry(root)
+month =tk. Entry(root)
+year = tk.Entry(root)
+tk.Label(root, text="Day:").pack()
+day.pack()
+tk.Label(root, text="Month:").pack()
+month.pack()
+tk.Label(root, text="Year:").pack()
+year.pack()
+tk.Button(root, text="Go", command=get_age).pack()
+lbl =tk. Label(root, text="")
+lbl.pack()
+root.mainloop()
