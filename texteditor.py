@@ -6,7 +6,7 @@ window.geometry("400x400")
 window.rowconfigure(0,minsize=800,weight=1)
 window.columnconfigure(1,minsize=800,weight=1)
 def open_file():
-    filename=askopenfilename(filetypes=[("Text Files","*.txt","allfiles","*.*")])
+    filename=askopenfilename(filetypes=[(("Text Files","*.txt")),("allfiles","*.*")])
     if not filename:
         return
     text_edit.delete(1.0,END)
@@ -16,7 +16,7 @@ def open_file():
         input_file.close()
     window.title(f"codingal's text editor{filename}")
 def save_file():
-    filename=asksaveasfilename(defaultextension="txt",filetypes=[("Text Files","*.txt","All Files","*.*")])
+    filename=asksaveasfilename(defaultextension="txt",filetypes=[("Text Files","*.txt"),("All Files","*.*")])
     
     if not filename:
         return
