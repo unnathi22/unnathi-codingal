@@ -14,55 +14,104 @@ class ordermanagement:
         self.setup_background(root)
         frame=ttk.Frame(root)
         frame.place(relx=0.5,rely=0.5,anchor=tk.CENTER)
-        tk.label(frame,text="hotel management",font=("Arial",20,"bold")).grid(row=0,columnspan=3,padx=10,pady=10)
+        tk.Label(frame,text="hotel management",font=("Arial",20,"bold")).grid(row=0,columnspan=3,padx=10,pady=10)
         self.menu_label={}
         self.menu_quantities={}
         for i,(item,price)in enumerate(self.menu_items.items(),start=1):
             label=ttk.Label(frame,text=f"{item},(${price})")
             label.grid(row=i,column=0,padx=5,pady=5)
-            
+            self.menu_labels[item] = label
 
-# 11) Create a currency selection section:
-#     a) Create a `StringVar` called `self.currency_var`.
-#     b) Add a "Currency:" label.
-#     c) Add a dropdown (`ttk.Combobox`) with options "USD" and "INR".
-#     d) Set default selection to "USD".
-#     e) Attach a trace to `self.currency_var` so when currency changes,
-#        it automatically calls `self.update_menu_prices`.
+            quantity_entry = ttk.Entry(frame, width=5)
+            quantity_entry.grid(row=i, column=1, padx=10, pady=5)
+            self.menu_quantities[item] = quantity_entry
 
-# 12) Add a "Place Order" button:
-#     a) When clicked, it runs `self.place_order()`.
+    
+        self.currency_var = tk.StringVar()
+        ttk.Label(
+            frame,
+            text="Currency:",
+            font=("Arial", 12)
+        ).grid(
+            row=len(self.menu_items) + 1,
+            column=0,
+            padx=10,
+            pady=5
+        )
+        currency_dropdown = ttk.Combobox(
+            frame,
+            textvariable=self.currency_var,
+            state="readonly",
+            width=18,
+            values=("USD", "INR")
+        )
+        currency_dropdown.grid(
+            row=len(self.menu_items) + 1,
+            column=1,
+            padx=10,
+            pady=5
+        )
+        currency_dropdown.current(0)  # Set default currency
+        self.currency_var.trace("w", self.update_menu_prices)
+        order_button = ttk.Button(
+            frame,
+            text="Place Order",
+            command=self.place_order
+        )
+        order_button.grid(
+            row=len(self.menu_items) + 2,
+            columnspan=3,
+            padx=10,
+            pady=10
+        )
+    def setup_background(self, root):
+        bg_width, bg_height = 800, 600
+        canvas = tk.Canvas(root, width=bg_width, height=bg_height)
+        canvas.pack()
 
-# 13) Define `setup_background(self, root)`:
-#     a) Create a Canvas of size 800x600.
-#     b) Load the background image file `background.png` using `tk.PhotoImage`.
-#     c) Resize it approximately using `.subsample(...)`.
-#     d) Place the image on the canvas using `create_image(...)`.
-#     e) Store the image reference (`canvas.image`) to prevent garbage collection.
+        original_image = tk.PhotoImage(file="tally.png")
+        background_image = original_image.subsample(
+            original_image.width() // bg_width,
+            original_image.height() // bg_height
+        )
 
-# 14) Define `update_menu_prices(self, *args)`:
-#     a) Read the selected currency from `self.currency_var`.
-#     b) Set currency symbol:
-#        - INR -> "₹"
-#        - USD -> "$"
-#     c) Set conversion rate:
-#        - INR -> exchange rate
-#        - USD -> 1
-#     d) Update every menu label text to show the converted price.
+        canvas.create_image(0, 0, anchor=tk.NW, image=background_image)
+        canvas.image = background_image
+    def update_menu_prices(self, *args):
+        currency = self.currency_var.get()
+        symbol = "₹" if currency == "INR" else "$"
+        rate = self.exchange_rate if currency == "INR" else 1
 
-# 15) Define `place_order(self)`:
-#     a) Initialize `total_cost = 0` and `order_summary` message text.
-#     b) Determine currency symbol and conversion rate (same as above).
-#     c) Loop through each menu item entry:
-#        i) Read quantity using `entry.get()`.
-#        ii) If quantity is a digit, convert it to int.
-#        iii) Compute price (converted), item cost, and add to total.
-#        iv) If quantity > 0, add line details to `order_summary`.
-#     d) If `total_cost > 0`, show the order summary in a messagebox.
-#     e) Else, show an error message asking the user to order at least one item.
+        for item, label in self.menu_labels.items():
+            price = self.menu_items[item] * rate
+            label.config(text=f"{item} ({symbol}{price}):")
+    def place_order(self):
+        total_cost = 0
+        order_summary = "Order Summary:\n"
+        currency = self.currency_var.get()
+        symbol = "₹" if currency == "INR" else "$"
+        rate = self.exchange_rate if currency == "INR" else 1
 
-# 16) In the main block (`if __name__ == "__main__":`):
-#     a) Create the main window using `root = tk.Tk()`.
-#     b) Create the app object `app = RestaurantOrderManagement(root)`.
-#     c) Set the window size to 800x600.
-#     d) Start the GUI loop using `root.mainloop()`.
+        for item, entry in self.menu_quantities.items():
+            quantity = entry.get()
+            if quantity.isdigit():
+                quantity = int(quantity)
+                price = self.menu_items[item] * rate
+                cost = quantity * price
+                total_cost += cost
+
+                if quantity > 0:
+                    order_summary += (
+                        f"{item}: {quantity} x {symbol}{price} = {symbol}{cost}\n"
+                    )
+
+        if total_cost > 0:
+            order_summary += f"\nTotal Cost: {symbol}{total_cost}"
+            messagebox.showinfo("Order Placed", order_summary)
+        else:
+            messagebox.showerror("Error", "Please order at least one item.")
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = ordermanagement(root)
+    root.geometry("800x600")  
+    root.mainloop()           
